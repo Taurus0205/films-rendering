@@ -1,0 +1,80 @@
+.movies {
+  margin-top: 30px;
+}
+
+.movies-heading {
+  text-align: center;
+}
+.movies__form {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+.movies__form__label {
+  width: 100%;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.movies__form__input,
+.movies__form__select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+}
+.movies__form__select {
+}
+.movies__form__btn {
+  padding: 5px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  color: white;
+  background-color: green;
+  box-shadow: 0 0 2px 2px green;
+
+  &:hover {
+    background-color: white;
+    color: green;
+  }
+}
+.movies__list {
+  @include reset-list;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.movies__item {
+  width: 100%;
+  max-width: 250px;
+  margin: 15px;
+  padding: 10px;
+  box-shadow: 0 0 8px 1px #333;
+}
+.movies__img {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.movies__heading {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.movies__paragraph-description {
+  margin-bottom: 10px;
+}
+
+.movies__time {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: rgb(25, 25, 238);
+  margin-bottom: 10px;
+}
+
+.movies__genres-list {
+  @include reset-list;
+}
+
+.movies__genres {
+}

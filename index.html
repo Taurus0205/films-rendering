@@ -7,5 +7,69 @@
     <link rel="stylesheet" href="./css/main.min.css" />
     <title>Document</title>
   </head>
-  <body></body>
+  <body>
+    <section class="movies">
+      <div class="container">
+        <h2 class="movies-heading">IMovie</h2>
+        <form class="movies__form">
+          <label class="movies__form__label">
+            Search
+            <input
+              class="movies__form__input"
+              type="search"
+              placeholder="Search..."
+            />
+          </label>
+
+          <label class="movies__form__label">
+            Search by genres
+            <select class="movies__form__select" name="movies__genres">
+              <option value="Action">Action</option>
+              <option value="comedy">Comedy</option>
+            </select>
+          </label>
+
+          <label class="movies__form__label">
+            Filter
+            <select class="movies__form__select" name="movies__genres">
+              <option value="A-Z">A-Z</option>
+              <option value="Z-A">Z-A</option>
+              <option value="old-new">old-new</option>
+              <option value="new-old">new-old</option>
+            </select>
+          </label>
+
+          <button class="movies__form__btn" type="submit">Search</button>
+        </form>
+
+        <ul class="movies__list">
+          <!-- <li class="movies__item">
+            <img
+              class="movies__img"
+              src="https://via.placeholder.com/150x200"
+              alt="image about the movie"
+              width="150"
+              height="200"
+            />
+
+            <h3 class="movies__heading">Avengers</h3>
+            <p class="movies__paragraph-description">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maxime,
+              eos!
+            </p>
+
+            <time class="movies__time" datetime="2021-10-10">2021-07-21</time>
+
+            <ul class="movies__genres-list">
+              <li class="movies__genres">Action</li>
+              <li class="movies__genres">Comedy</li>
+            </ul>
+          </li> -->
+        </ul>
+      </div>
+    </section>
+    <script src="./js/utils.js"></script>
+    <script src="./js/films.js"></script>
+    <script src="./js/main.js"></script>
+  </body>
 </html>
