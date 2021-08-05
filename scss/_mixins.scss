@@ -14,4 +14,17 @@
   margin-bottom: $marbot;
 }
 
-
+@mixin btn {
+  display: block;
+  padding: 5px 15px;
+  background-color: cadetblue;
+  box-shadow: 0 0 2px 1px cadetblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  &:hover {
+    color: cadetblue;
+    background-color: white;
+  }
+}

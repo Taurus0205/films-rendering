@@ -1,99 +1,170 @@
-const elMoviesList = makeElement(".movies__list");
-const elSelectGenres = makeElement(".movies__form__select");
+const elMovieList = selectElement(".movies__list");
+const elMovieTemplate = selectElement(".movie__template").content;
 
-function renderGenderSelect(films, element) {
-  const result = ["All"];
+// modal
+const elModalInfo = selectElement(".modal");
+const elModalImg = selectElement(".modal__img");
+const elModalHeading = selectElement(".modal__heading");
+const elModalDescription = selectElement(".modal__paragraph-description");
+const elModalTime = selectElement(".modal__time");
+const elModalList = selectElement(".modal__genres-list");
+const elModalCloseBtn = selectElement(".modal__close-btn");
 
-  films.forEach((film) => {
+elModalInfo.addEventListener("click", (evt) => {
+  if (evt.target.dataset.modalOrigin === "1") {
+    elModalInfo.classList.remove("modal--active");
+  }
+});
+
+elModalCloseBtn.addEventListener("click", (evt) => {
+  elModalInfo.classList.remove("modal--active");
+});
+
+// Form elements
+const elForm = selectElement(".movies__form");
+const elMoviesInput = selectElement(".movies__form__input", elForm);
+const elSelectGenres = selectElement(".movies__form__select", elForm);
+const elSelectSort = selectElement(".sort-films", elForm);
+
+// Rendering genres
+
+function renderGenres(filmArr, element) {
+  const result = [];
+  filmArr.forEach((film) => {
     film.genres.forEach((genre) => {
       if (!result.includes(genre)) {
         result.push(genre);
       }
     });
   });
-  element.innerHTML = null;
+
   result.forEach((genre) => {
     const newOption = createDOM("option");
-    // newOption.value = genre.toLowerCase();
+    newOption.value = genre;
     newOption.textContent = genre;
+
     element.appendChild(newOption);
   });
 }
 
-function renderGenderList(genre, newGenreList) {
-  const newLi = createDOM("li");
-  newLi.textContent = genre;
-  newGenreList.appendChild(newLi);
-}
+renderGenres(films, elSelectGenres);
 
-function renderMovies(filmsArr, element) {
+// rendering by genres
+
+// Rendering films
+function filmRender(filmArr, element) {
   element.innerHTML = null;
-  filmsArr.forEach((film) => {
-    //   create elements
-    const newLi = createDOM("li");
-    const newImg = createDOM("img");
-    const newHeading = createDOM("h3");
-    const newParagraph = createDOM("p");
-    const newTime = createDOM("time");
-    const newGenreList = createDOM("ul");
+  filmArr.forEach((film) => {
+    const movieTemplate = elMovieTemplate.cloneNode(true);
 
-    // adding classes and atributes
-    newLi.setAttribute("class", "movies__item");
-    newImg.setAttribute("src", film.poster);
-    newImg.setAttribute("alt", film.title);
-    newImg.setAttribute("width", "150");
-    newImg.setAttribute("height", "200");
-    newImg.setAttribute("class", "movies__img");
-    newHeading.setAttribute("class", "movies__heading");
-    newParagraph.setAttribute("class", "movies__paragraph-description");
-    newTime.setAttribute("datetime", normalizeDate(film.release_date));
-    newTime.setAttribute("class", "movies__time");
-    newGenreList.setAttribute("class", "movies__genres-list");
+    selectElement(".movies__img", movieTemplate).setAttribute(
+      "src",
+      film.poster
+    );
+    selectElement(".movies__img", movieTemplate).setAttribute(
+      "alt",
+      film.title
+    );
 
-    // Assigning
-    newHeading.textContent = film.title;
-    newParagraph.textContent =
-      film.overview.split(" ").slice(0, 20).join(" ") + " ...";
-    newTime.textContent = normalizeDate(film.release_date);
+    selectElement(".movies__heading", movieTemplate).textContent = film.title;
 
-    film.genres.forEach((genre) => {
-      renderGenderList(genre, newGenreList);
+    const elMoreBtn = selectElement(".movies__more-btn", movieTemplate);
+    elMoreBtn.dataset.film_id = film.id;
+    elMoreBtn.addEventListener("click", (evt) => {
+      elModalInfo.classList.add("modal--active");
+      const filmId = evt.target.dataset.film_id;
+      const foundFilms = filmArr.find((item) => item.id === filmId);
+
+      elModalImg.setAttribute("src", foundFilms.poster);
+      elModalHeading.textContent = foundFilms.title;
+      elModalDescription.textContent = foundFilms.overview;
+      elModalTime.textContent = normalizeDate(foundFilms.release_date);
+
+      elModalList.innerHTML = null;
+      foundFilms.genres.forEach((genre) => {
+        const newLi = createDOM("li");
+        newLi.textContent = genre;
+        elModalList.appendChild(newLi);
+      });
     });
-    newLi.appendChild(newImg);
-    newLi.appendChild(newHeading);
-    newLi.appendChild(newParagraph);
-    newLi.appendChild(newTime);
-    newLi.appendChild(newGenreList);
 
-    element.appendChild(newLi);
+    element.appendChild(movieTemplate);
   });
 }
-renderGenderSelect(films, elSelectGenres);
-renderMovies(films, elMoviesList);
 
-const elForm = makeElement(".movies__form");
-const elGenresSelect = makeElement(".movies__form__select");
-const elInputSearch = makeElement(".movies__form__input");
+filmRender(films, elMovieList);
+
+function sortFilms(filmArr, format) {
+  // const sortedAlph = filmArr.sort((a, b) => {
+  //   if (a.title > b.title) {
+  //     return 1;
+  //   } else if (a.title < b.title) {
+  //     return -1;
+  //   } else {
+  //     return 0;
+  //   }
+  // });
+
+  const sortedDate = filmArr.sort((a, b) => a.release_date - b.release_date);
+
+  //   if (format === "a_z") {
+  //     return sortedAlph;
+  //   } else if (format === "z_a") {
+  //     return sortedAlph.reverse();
+  //   } else if (format === "old_new") {
+  //     return sortedDate;
+  //   } else if (format === "new_old") {
+  //     return sortedDate.reverse();
+  //   }
+  // }
+
+  if (format === "a_z") {
+    return filmArr.sort((a, b) => {
+      if (a.title > b.title) {
+        return 1;
+      } else if (a.title < b.title) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+  } else if (format === "z_a") {
+    return filmArr.sort((a, b) => {
+      if (a.title > b.title) {
+        return -1;
+      } else if (a.title < b.title) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+  } else if (format === "old_new") {
+    return sortedDate;
+  } else if (format === "new_old") {
+    return sortedDate.reverse();
+  }
+}
 
 elForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
 
-  const selectGenres = elGenresSelect.value.trim();
-  const inputSearch = elInputSearch.value.trim();
-  const regex = new RegExp(inputSearch, "gi");
+  const moviesInput = elMoviesInput.value.trim();
+  const regex = new RegExp(moviesInput, "gi");
   const searchedFilms = films.filter((film) => film.title.match(regex));
+  const selectGenre = elSelectGenres.value.trim();
+  const selectSort = elSelectSort.value.trim();
 
-  let foundFilms = [];
+  let genredFilms = [];
 
-  const hasGenre = (film) => {
-    return film.genres.includes(selectGenres);
-  };
-
-  if (selectGenres === "All") {
-    foundFilms = searchedFilms;
+  if (selectGenre === "All") {
+    genredFilms = searchedFilms;
   } else {
-    foundFilms = searchedFilms.filter(hasGenre);
+    genredFilms = searchedFilms.filter((film) =>
+      film.genres.includes(selectGenre)
+    );
   }
 
-  renderMovies(foundFilms, elMoviesList);
+  const sortedFilms = sortFilms(genredFilms, selectSort);
+
+  filmRender(sortedFilms, elMovieList);
 });
